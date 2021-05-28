@@ -56,7 +56,8 @@ In de map C:\Windows\System32\drivers\etc vind je het bestand **hosts**. Daarin 
    ```
    127.0.0.1 forum2021-client.test
    ```  
-   Hierbij is forum2021-client.test de gekozen lokale domeinnaam.
+   Hierbij is forum2021-client.test de gekozen lokale domeinnaam.  
+   LET OP!!!! Je kunt geen tld's gebruiken die gangbaar zijn op het internet. Daarom is het veiliger om als TLD ***.test*** of ***.local*** te gebruiken.
 4. Punt 3 herhaal je voor alle lokale domeinnamen die je wil gebruiken.
 5. Sla het bestand op.
 6. Zoek in de installatie map van WAMP of XAMPP of ... naar het bestand **httpd-vhosts.conf**  

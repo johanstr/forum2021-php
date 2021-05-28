@@ -23,7 +23,7 @@ Je vindt de volgende mappen:
 # Hoe maken we een lokale domeinnaam aan?
 Dit doe je in verschillende stappen, waarbij de tweede stap afhankelijk is van het feit of je WAMP, XAMPP e.d. gebruikt. We gaan echter in de uitleg hieronder uit van Windows als OS.  
   
-## Stap 1 - host aanmaken voor de OS
+## Stap 1 - Lokale domeinnaam maken
 In de map C:\Windows\System32\drivers\etc vind je het bestand **hosts**. Daarin kun je zoiets zien als:  
 ```
 # Copyright (c) 1993-2009 Microsoft Corp.

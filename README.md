@@ -122,3 +122,39 @@ NameVirtualHost *:80
 10. Herstart Apache (de webserver software)
 11. Probeer het maar eens uit door nu in de adresbalk van de browser de volledige url te tikken.  
     Dus: ***http://forum2021-client.test***  
+  
+# Database
+Voor dit project (API) maken we gebruik van een MySQL database. Daarin hebben we de volgende tabellen:  
+* users  
+  Kolommen: id, name, email, password, is_admin, created_at, updated_at  
+* threads  
+  Kolommen: id, title, description, user_id, created_at, updated_at  
+* topics  
+  Kolommen: id, title, body, user_id, thread_id, created_at, updated_at  
+* replies  
+  Kolommen: id, body, user_id, topic_id, created_at, updated_at
+
+  
+Met PhpMyAdmin maken we de database en de tabellen.
+
+# Testgegevens
+We willen de database en de tabellen graag vullen met dummy gegevens zodat we tijdens het ontwikkelen kunnen testen.
+
+Ik maak daarvoor gebruik van de volgende tool voor vanilla PHP:  
+https://github.com/johanstr/jsmdbseeder  
+  
+1. Lees goed de documentatie van de repo.  
+2. Clone deze repo in een andere map dan je projectmap
+3. Na het clone voer je de volgende commandline uit:  
+```bash
+   composer install
+```  
+4. Je past de volgende bestanden aan voor je huidig project:  
+   1. config/dbconnection.php (Credentails voor de database)
+   2. config/database.php (hoe wil je de database vullen met testgegevens)
+5. Via de commandline kun je de tool zijn werk laten uitvoeren d.m.v.:  
+```bash
+   php jsmdbseeder.php
+```  
+
+Als het goed is kun je nu zien dat de tabellen gevuld zijn met testgegevens.

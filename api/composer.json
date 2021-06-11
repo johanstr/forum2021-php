@@ -1,0 +1,17 @@
+{
+    "name": "johanstr65/api",
+    "description": "Vanilla PHP API",
+    "type": "project",
+    "authors": [
+        {
+            "name": "J.J. Strootman",
+            "email": "jj.strootman@alfa-college.nl"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

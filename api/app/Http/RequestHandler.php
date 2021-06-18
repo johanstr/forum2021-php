@@ -21,6 +21,8 @@ class RequestHandler
      */
     private $resource;
     private $id;
+    private $classname = '';
+    private $method_name = '';
 
     /*
      * Onderstaande code wordt uitgevoerd zodra ik met de opdracht new
@@ -53,6 +55,16 @@ class RequestHandler
         } else {
             $this->resource = '/';
         }
+    }
+
+    private function getClassName()
+    {
+        return $this->routes[$this->request_type][$this->resource][0];
+    }
+
+    private function getMethodName()
+    {
+        return $this->routes[$this->request_type][$this->resource][1];
     }
 
     /*
@@ -111,11 +123,8 @@ class RequestHandler
 
     private function handleGetRequest()
     {
-        // Bepalen welke controller moet worden gebruikt
-        $classname = $this->routes[$this->request_type][$this->resource][0];
-
-        // Bepalen welke method in die controller moet worden uitgevoerd
-        $method_name = $this->routes[$this->request_type][$this->resource][1];
+        $classname = $this->getClassName();
+        $method_name = $this->getMethodName();
 
         $controller = new $classname;       // new ThreadController
         if($this->id !== 0)
@@ -134,19 +143,8 @@ class RequestHandler
      */
     private function handlePostRequest()
     {
-        /* Bepalen welke controller moet worden gebruikt
-         * We bepalen de naam van de Controller Class m.b.v. de routes array:
-         * 'thread' =>     [ App\Http\Controllers\ThreadController::class, 'create' ]
-         *     ^                         ^                                     ^
-         *     |                         |                                     |
-         *  welke resource          Welke controller                        Welke method in de controller
-         *                            index 0                                index 1
-         *
-         */
-        $classname = $this->routes[$this->request_type][$this->resource][0];
-
-        // Bepalen welke method in die controller moet worden uitgevoerd
-        $method_name = $this->routes[$this->request_type][$this->resource][1];
+        $classname = $this->getClassName();
+        $method_name = $this->getMethodName();
 
         $request_data = $_POST;             // Data b.v. vanuit een formulier
 
@@ -162,16 +160,41 @@ class RequestHandler
      */
     private function handlePutRequest()
     {
-        //
+        $classname = $this->getClassName();
+        $method_name = $this->getMethodName();
+
+        parse_str(file_get_contents('php://input'), $request_data);             // Data b.v. vanuit een formulier
+
+        $controller = new $classname;       // new ThreadController
+        $return_value = $controller->$method_name($request_data, $this->id);
+
+        HttpResponse::sendResponse($return_value);
+        die();
     }
 
     private function handlePatchRequest()
     {
-        //
+        $classname = $this->getClassName();
+        $method_name = $this->getMethodName();
+
+        parse_str(file_get_contents('php://input'), $request_data);             // Data b.v. vanuit een formulier
+
+        $controller = new $classname;       // new ThreadController
+        $return_value = $controller->$method_name($request_data);
+
+        HttpResponse::sendResponse($return_value);
+        die();
     }
 
     private function handleDeleteRequest()
     {
-        //
+        $classname = $this->getClassName();
+        $method_name = $this->getMethodName();
+
+        $controller = new $classname;
+        $return_value = $controller->$method_name($this->id);
+
+        HttpResponse::sendResponse($return_value);
+        die();
     }
 }

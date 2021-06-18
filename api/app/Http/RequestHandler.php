@@ -65,6 +65,7 @@ class RequestHandler
         switch($this->request_type) {
             case 'GET':
                 // Hier komt de code die een GET-request gaat afhandelen
+                $this->handleGetRequest();
                 break;
 
             case 'POST':
@@ -101,14 +102,24 @@ class RequestHandler
      */
     private function handleOptionsRequest()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Methods: POST, GET, DELETE, PUT, PATCH, OPTIONS');
-            header('Access-Control-Allow-Headers: token, Content-Type, Accept, Access-Control-Allow-Origin');
-            header('Access-Control-Max-Age: 1728000');
-            header('Content-Length: 0');
-            header('Content-Type: text/plain');
-            die();
-        }
+        HttpResponse::sendCORSHeader();
+    }
+
+    public function handleGetRequest()
+    {
+        // Bepalen welke controller moet worden gebruikt
+        $classname = $this->routes[$this->request_type][$this->resource][0];
+
+        // Bepalen welke method in die controller moet worden uitgevoerd
+        $method_name = $this->routes[$this->request_type][$this->resource][1];
+
+        $controller = new $classname;       // new ThreadController
+        if($this->id !== 0)
+            $return_value = $controller->$method_name($this->id);           // ThreadController->index
+        else
+            $return_value = $controller->$method_name();
+
+        HttpResponse::sendResponse($return_value);
+        die();
     }
 }

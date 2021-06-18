@@ -8,7 +8,10 @@
             "email": "jj.strootman@alfa-college.nl"
         }
     ],
-    "require": {},
+    "require": {
+        "ext-pdo": "*",
+        "ext-json": "*"
+    },
     "autoload": {
         "psr-4": {
             "App\\": "app/"

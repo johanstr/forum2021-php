@@ -70,18 +70,22 @@ class RequestHandler
 
             case 'POST':
                 // Hier komt de code die een POST-request gaat afhandelen
+                $this->handlePostRequest();
                 break;
 
             case 'PUT':
                 // Hier komt de code die een PUT request gaat afhandelen
+                $this->handlePutRequest();
                 break;
 
             case 'PATCH':
                 // Hier komt de code die een PATCH request gaat afhandelen
+                $this->handlePatchRequest();
                 break;
 
             case 'DELETE':
                 // Hier komt de code die een DELETE request gaat afhandelen
+                $this->handleDeleteRequest();
                 break;
 
             case 'OPTION':
@@ -105,7 +109,7 @@ class RequestHandler
         HttpResponse::sendCORSHeader();
     }
 
-    public function handleGetRequest()
+    private function handleGetRequest()
     {
         // Bepalen welke controller moet worden gebruikt
         $classname = $this->routes[$this->request_type][$this->resource][0];
@@ -121,5 +125,53 @@ class RequestHandler
 
         HttpResponse::sendResponse($return_value);
         die();
+    }
+
+    /*
+     * Handel een POST request af
+     * --------------------------
+     * Dus in feite voeg een record toe aan een bepaalde tabel in de database
+     */
+    private function handlePostRequest()
+    {
+        /* Bepalen welke controller moet worden gebruikt
+         * We bepalen de naam van de Controller Class m.b.v. de routes array:
+         * 'thread' =>     [ App\Http\Controllers\ThreadController::class, 'create' ]
+         *     ^                         ^                                     ^
+         *     |                         |                                     |
+         *  welke resource          Welke controller                        Welke method in de controller
+         *                            index 0                                index 1
+         *
+         */
+        $classname = $this->routes[$this->request_type][$this->resource][0];
+
+        // Bepalen welke method in die controller moet worden uitgevoerd
+        $method_name = $this->routes[$this->request_type][$this->resource][1];
+
+        $request_data = $_POST;             // Data b.v. vanuit een formulier
+
+        $controller = new $classname;       // new ThreadController
+        $return_value = $controller->$method_name($request_data);
+
+        HttpResponse::sendResponse($return_value);
+        die();
+    }
+
+    /*
+     *
+     */
+    private function handlePutRequest()
+    {
+        //
+    }
+
+    private function handlePatchRequest()
+    {
+        //
+    }
+
+    private function handleDeleteRequest()
+    {
+        //
     }
 }

@@ -8,17 +8,7 @@
     <title>Client Test</title>
 </head>
 <body>
-<pre>
-<?php
-    @include('app/Test.php');
-    $route = ['/test', Test::class ];
 
-    $myclass = new $route[1];
-
-    print_r($route);
-    print_r($myclass);
-?>
-</pre>
     <script src="js/index.js"></script>
 </body>
 </html>

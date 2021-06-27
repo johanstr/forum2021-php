@@ -157,4 +157,165 @@ https://github.com/johanstr/jsmdbseeder
    php jsmdbseeder.php
 ```  
 
-Als het goed is kun je nu zien dat de tabellen gevuld zijn met testgegevens.
+Als het goed is kun je nu zien dat de tabellen gevuld zijn met testgegevens.  
+  
+# Resultaat na de laatste les  
+Na de laatste les hebben we voorbeelden gecreëerd m.b.t. een GET-request en een POST-request in de client app.  
+  
+## GET-request
+We hebben een GET-request uitgevoerd naar de API om alle threads uit de database te ontvangen en deze in de pagina zichtbaar te maken.  
+  
+### index.js
+```javascript
+let response = [];
+let thread_list = document.querySelector('#thread-list');
+
+window.onload = function() {
+    callAPI();
+};
+
+async function callAPI()
+{
+    await fetch('http://forum-php-api.test/threads')
+        .then(response => response.json())
+        .then(data => {
+            response = data.data;
+
+            showThreads();
+        })
+        .catch(error => console.log(error));
+}
+
+/* showThreads()
+ * -------------
+ * Laat alle threads uit de database zien in een tabel op de pagina
+ *
+ */
+function showThreads()
+{
+    response.forEach(thread => {
+        thread_list.innerHTML += `
+            <tr>
+                <th scope="row" class="text-center">${thread.id}</th>
+                <td>${thread.title}</td>
+                <td>${thread.description}</td>
+                <td class="text-center">${thread.user_id}</td>
+                <td class="text-center">${thread.created_at}</td>
+                <td class="text-center">${thread.updated_at}</td>
+                <td class="text-center">
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        `;
+    })
+
+```  
+  
+### index.php
+```html
+<div class="row">
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-center">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" class="text-center">User ID</th>
+                    <th scope="col" class="text-center" style="width: 100px;">Created At</th>
+                    <th scope="col" class="text-center" style="width: 100px;">Updated At</th>
+                    <th scope="col" class="text-center" style="width: 100px;">Acties</th>
+                </tr>
+            </thead>
+            <tbody id="thread-list">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+```  
+  
+  
+## POST-request  
+Een simulatie waarin we een nieuwe thread kunnen aanmaken in een webformulier in de client app.  
+  
+### create-thread.js
+```javascript
+let response = [];
+let thread_list = document.querySelector('#thread-list');
+
+window.onload = function() {
+    callAPI();
+};
+
+async function callAPI()
+{
+    await fetch('http://forum-php-api.test/threads')
+        .then(response => response.json())
+        .then(data => {
+            response = data.data;
+
+            showThreads();
+        })
+        .catch(error => console.log(error));
+}
+
+/* showThreads()
+ * -------------
+ * Laat alle threads uit de database zien in een tabel op de pagina
+ *
+ */
+function showThreads()
+{
+    response.forEach(thread => {
+        thread_list.innerHTML += `
+            <tr>
+                <th scope="row" class="text-center">${thread.id}</th>
+                <td>${thread.title}</td>
+                <td>${thread.description}</td>
+                <td class="text-center">${thread.user_id}</td>
+                <td class="text-center">${thread.created_at}</td>
+                <td class="text-center">${thread.updated_at}</td>
+                <td class="text-center">
+                    <button class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>
+        `;
+    })
+
+```  
+  
+### create-thread.php
+```html
+<div class="row">
+    <div class="col-md-12">
+        <div id="api-result">
+            <!-- Hier laten we de response van de API zien na een sbumit -->
+        </div>
+        <!--
+             Het formulier krijgt een ID omdat we via JavaScript willen voorkomen dat de standaard actie
+             door de browser wordt uitgevoerd. Dus halen we het formulier binnen en JavaScript en koppelen
+             we hier een eventlistener aankoppelen voor de submit event.
+        -->
+        <form id="create-thread-form">
+            <!-- We simuleren met de hidden input tag hieronder dat een admin de thread aanmaakt -->
+            <input type="hidden" name="user_id" value="1" />
+            <div class="mb-3">
+                <label for="titel" class="form-label">Titel</label>
+                <!-- Een input tag moet een name attribuut hebben waarbij de naam gelijk is aan de kolom in de tabel -->
+                <input type="text" id="titel" name="title" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="beschrijving" class="form-label">Beschrijving</label>
+                <!-- Ook een textarea moet een name attribuut hebben met de naam van de kolom in de database -->
+                <textarea type="text" id="beschrijving" name="description" class="form-control" rows="8"></textarea>
+            </div>
+            <div class="mb-3 float-end">
+                <button type="submit" class="btn btn-primary">Opslaan</button>
+            </div>
+        </form>
+    </div>
+</div>
+```  
